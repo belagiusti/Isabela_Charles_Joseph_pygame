@@ -1,4 +1,4 @@
-## Colocando pontuação
+## Colocando musica
 import pygame 
 import random 
 
@@ -14,6 +14,10 @@ fonte = pygame.font.Font(None, 35) #variavel para definir a fonte (não coloquei
 pygame.display.set_caption('🏃🏽‍♂️🏃🏽‍♀️RUN GAME🏃🏽‍♀️🏃🏽‍♂️')
 tempo_inicial = 0 #zera a pontuação ao reiniciar
 
+#Toca a música no jogo
+som_fundo = pygame.mixer.Sound('assets/music/musica.mp3') #som da musica
+som_fundo.set_volume(1) #volume som do pulo
+som_fundo.play() #toca a musica
 
 imagem_fundo = pygame.image.load('assets/img/RUA.png').convert_alpha()
 imagem_fundo = pygame.transform.scale(imagem_fundo, (WIDTH, HEIGHT))
@@ -172,14 +176,14 @@ while loop:
         if faixa_atual > 0:  # Verifica se não está na faixa mais à esquerda
             faixa_atual -= 1  # Move para a faixa à esquerda
             imagem_carro_vermelho_rect.centerx = faixas_estrada_carro[faixa_atual]
-            pygame.time.wait(200)  # Pequena pausa para evitar movimento rápido demais
+            pygame.time.wait(100)  # Pequena pausa para evitar movimento rápido demais
 
     # Movimento para a direita
     if keys[pygame.K_RIGHT]:
         if faixa_atual < len(faixas_estrada_carro) - 1:  # Verifica se não está na faixa mais à direita
             faixa_atual += 1  # Move para a faixa à direita
             imagem_carro_vermelho_rect.centerx = faixas_estrada_carro[faixa_atual]
-            pygame.time.wait(150)  # Pequena pausa para evitar movimento rápido demais
+            pygame.time.wait(100)  # Pequena pausa para evitar movimento rápido demais
 
 
     # Atualiza estado do jogo
