@@ -1,4 +1,4 @@
-## Fase 2
+## Fase 3
 import pygame 
 import random 
 
@@ -16,7 +16,7 @@ tempo_inicial = 0 #zera a pontuação ao reiniciar
 barricada_speed = 10
 #Toca a música no jogo
 som_fundo = pygame.mixer.Sound('assets/music/musica.mp3') #som da musica
-som_fundo.set_volume(1) #volume som do pulo
+som_fundo.set_volume(1) #volume som
 som_fundo.play() #toca a musica
 
 imagem_fundo = pygame.image.load('assets/img/RUA.png').convert_alpha()
@@ -60,11 +60,7 @@ reposiciona_barricada()
 #função que mostra a pontuação
 def mostra_pontuacao(tempo_inicial):
     contagem_tempo = int(pygame.time.get_ticks() / 1000) - tempo_inicial #pega os milliseconds e subtrai do tempo inicial quando reiniciar o jogo (precisa dividir por mil para ficar em segundos)        
-    if contagem_tempo > 20:
-        texto_pontuacao_tela = fonte.render(f'Pontuação: {contagem_tempo}', False, (255,235,144)) #variavel para definir a pontuação Fase 2
-    else:
-        texto_pontuacao_tela = fonte.render(f'Pontuação: {contagem_tempo}', False, (106,168,79)) #variavel para definir a pontuação Fase 1
-
+    texto_pontuacao_tela = fonte.render(f'Pontuação: {contagem_tempo}', False, (28,28,28)) #variavel para definir a pontuação Fase 2
     texto_pontuacao_retangulo = texto_pontuacao_tela.get_rect(center = (WIDTH/2, 50)) #cria a pontuação
     window.blit(texto_pontuacao_tela, texto_pontuacao_retangulo) #desenha a pontuação na janela
     return contagem_tempo #retorna a pontuação
@@ -171,7 +167,9 @@ loop = True
 
 while loop:
     
-    if mostra_pontuacao(tempo_inicial)> 20:
+    if mostra_pontuacao(tempo_inicial)> 30:
+        imagem_fundo = pygame.image.load('assets/img/RUA3.png').convert() #carrega a imagem da fase 3.
+    elif mostra_pontuacao(tempo_inicial)>15:
         imagem_fundo = pygame.image.load('assets/img/RUA2.png').convert() #carrega a imagem da fase 2.
     else:
         imagem_fundo = pygame.image.load('assets/img/RUA.png').convert_alpha()
@@ -225,8 +223,10 @@ while loop:
         show_game_over_screen()  # Chama a tela de "Game Over" se houver colisão
         reposiciona_barricada()
         tempo_inicial = int(pygame.time.get_ticks() / 1000)
-    if mostra_pontuacao(tempo_inicial)> 20:
+    if mostra_pontuacao(tempo_inicial)> 30:
         barricada_speed = 20
+    elif mostra_pontuacao(tempo_inicial)> 15:
+        barricada_speed = 15
     else:
         barricada_speed = 10
 
