@@ -1,4 +1,4 @@
-## Adicionamtdo game over e tela incio tudo junto 
+## Colocando pontuação (Não ajustada)
 import pygame 
 import random 
 
@@ -10,7 +10,9 @@ FDS = 60
 WIDTH = 870
 HEIGHT = 600
 window = pygame.display.set_mode((WIDTH, HEIGHT))
+fonte = pygame.font.Font(None, 35) #variavel para definir a fonte (não coloquei nenhuma)
 pygame.display.set_caption('🏃🏽‍♂️🏃🏽‍♀️RUN GAME🏃🏽‍♀️🏃🏽‍♂️')
+tempo_inicial = 10 #zera a pontuação ao reiniciar
 
 
 imagem_fundo = pygame.image.load('assets/img/RUA.png').convert_alpha()
@@ -50,11 +52,21 @@ def reposiciona_barricada():
 
 reposiciona_barricada()
 
+#função que mostra a pontuação
+def mostra_pontuacao():
+    contagem_tempo = int(pygame.time.get_ticks() / 1000) - tempo_inicial #pega os milliseconds e subtrai do tempo inicial quando reiniciar o jogo (precisa dividir por mil para ficar em segundos)        
+    texto_pontuacao_tela = fonte.render(f'Pontuação: {contagem_tempo}', False, (28,28,28))
+
+    texto_pontuacao_retangulo = texto_pontuacao_tela.get_rect(center = (500, 50)) #cria a pontuação
+    window.blit(texto_pontuacao_tela, texto_pontuacao_retangulo) #desenha a pontuação na janela
+    return contagem_tempo #retorna a pontuação
+
+
 # Função para exibir a tela de "Game Over"
 def show_game_over_screen():
-    window.fill((135, 206, 250))  
+    window.fill((135, 206, 250))  # Azul Celeste, mesma cor usada na tela inicial
     font = pygame.font.SysFont(None, 72)
-    game_over_text = font.render("GAME OVER", True, (255, 0, 0))  
+    game_over_text = font.render("GAME OVER", True, (255, 0, 0))  # Vermelho para o texto
     window.blit(game_over_text, (WIDTH // 2 - game_over_text.get_width() // 2, HEIGHT // 2 - game_over_text.get_height() // 2))
 
     # Mensagem de reinício
@@ -82,7 +94,7 @@ def show_start_screen():
     
     # Fonte maior e cor azul celeste para o título
     title_font = pygame.font.SysFont(None, 72)
-    title = title_font.render("RUN GAME", True, (135, 206, 250)) 
+    title = title_font.render("RUN GAME", True, (135, 206, 250))  # Azul Celeste
     
     # Fonte menor para a história
     font = pygame.font.SysFont(None, 40)
@@ -108,12 +120,12 @@ def show_start_screen():
         rendered_line = ""
         for char in line:
             rendered_line += char
-            text = font.render(rendered_line, True, (255, 255, 255)) 
+            text = font.render(rendered_line, True, (255, 255, 255)) ### branco 
             window.blit(imagem_inicio, imagem_inicio_rect)
             window.blit(imagem_inicio, imagem_inicio_rect_2)
             window.blit(title, (WIDTH // 2 - title.get_width() // 2, HEIGHT // 4))
             for j in range(i):
-                previous_text = font.render(story[j], True, (255, 255, 255)) 
+                previous_text = font.render(story[j], True, (255, 255, 255)) ## branco 
                 window.blit(previous_text, (WIDTH // 2 - previous_text.get_width() // 2, HEIGHT // 3 + 40 * (j + 1)))
             window.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 3 + 40 * (i + 1)))
             pygame.display.flip()
@@ -131,6 +143,7 @@ def show_start_screen():
                 exit()
             if event.type == pygame.KEYUP or event.type == pygame.MOUSEBUTTONUP:
                 waiting = False
+                mostra_pontuacao()
 
 # Carrega a imagem de fundo da tela de início
 imagem_inicio = pygame.image.load('assets/img/FUNDO_inicio.png').convert()
@@ -148,9 +161,6 @@ show_start_screen()
 loop = True 
 
 while loop:
-    for events in pygame.event.get():
-        if events.type == pygame.QUIT:
-            loop = False
     
 
     #### Movimento com as teclas 
@@ -186,7 +196,7 @@ while loop:
     imagem_fundo_rect_2 = imagem_fundo_rect.copy()
     imagem_fundo_rect_2.y -= imagem_fundo_rect_2.height
     window.blit(imagem_fundo, imagem_fundo_rect_2)
-
+    mostra_pontuacao()
 
     # Atualiza a posição da barricada
     imagem_barricada_rect.y += barricada_speed
@@ -207,6 +217,10 @@ while loop:
 
     # Desenha o carro vermelho
     window.blit(imagem_carro_vermelho, imagem_carro_vermelho_rect)
+
+    for events in pygame.event.get():
+        if events.type == pygame.QUIT:
+            loop = False
 
     pygame.display.update()
     clock.tick(FDS)
