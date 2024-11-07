@@ -1,4 +1,4 @@
-## Colocando musica
+## Fase 2
 import pygame 
 import random 
 
@@ -13,7 +13,7 @@ window = pygame.display.set_mode((WIDTH, HEIGHT))
 fonte = pygame.font.Font(None, 35) #variavel para definir a fonte (não coloquei nenhuma)
 pygame.display.set_caption('🏃🏽‍♂️🏃🏽‍♀️RUN GAME🏃🏽‍♀️🏃🏽‍♂️')
 tempo_inicial = 0 #zera a pontuação ao reiniciar
-
+barricada_speed = 10
 #Toca a música no jogo
 som_fundo = pygame.mixer.Sound('assets/music/musica.mp3') #som da musica
 som_fundo.set_volume(1) #volume som do pulo
@@ -21,6 +21,7 @@ som_fundo.play() #toca a musica
 
 imagem_fundo = pygame.image.load('assets/img/RUA.png').convert_alpha()
 imagem_fundo = pygame.transform.scale(imagem_fundo, (WIDTH, HEIGHT))
+
 imagem_fundo_rect = imagem_fundo.get_rect()
 speed_fundo = 10
 
@@ -47,7 +48,7 @@ imagem_barricada_rect.y = -imagem_barricada.get_height()
 
 # Defina as faixas de estrada
 faixas_estrada_barricada = [270, 405, 540]
-barricada_speed = 10
+
 
 # Função para reposicionar a barricada
 def reposiciona_barricada():
@@ -59,7 +60,10 @@ reposiciona_barricada()
 #função que mostra a pontuação
 def mostra_pontuacao(tempo_inicial):
     contagem_tempo = int(pygame.time.get_ticks() / 1000) - tempo_inicial #pega os milliseconds e subtrai do tempo inicial quando reiniciar o jogo (precisa dividir por mil para ficar em segundos)        
-    texto_pontuacao_tela = fonte.render(f'Pontuação: {contagem_tempo}', False, (28,28,28))
+    if contagem_tempo > 20:
+        texto_pontuacao_tela = fonte.render(f'Pontuação: {contagem_tempo}', False, (255,235,144)) #variavel para definir a pontuação Fase 2
+    else:
+        texto_pontuacao_tela = fonte.render(f'Pontuação: {contagem_tempo}', False, (106,168,79)) #variavel para definir a pontuação Fase 1
 
     texto_pontuacao_retangulo = texto_pontuacao_tela.get_rect(center = (WIDTH/2, 50)) #cria a pontuação
     window.blit(texto_pontuacao_tela, texto_pontuacao_retangulo) #desenha a pontuação na janela
@@ -167,6 +171,12 @@ loop = True
 
 while loop:
     
+    if mostra_pontuacao(tempo_inicial)> 20:
+        imagem_fundo = pygame.image.load('assets/img/RUA2.png').convert() #carrega a imagem da fase 2.
+    else:
+        imagem_fundo = pygame.image.load('assets/img/RUA.png').convert_alpha()
+    imagem_fundo = pygame.transform.scale(imagem_fundo, (WIDTH, HEIGHT))
+    imagem_fundo_rect = imagem_fundo.get_rect()
 
     #### Movimento com as teclas 
     keys = pygame.key.get_pressed()
@@ -215,6 +225,10 @@ while loop:
         show_game_over_screen()  # Chama a tela de "Game Over" se houver colisão
         reposiciona_barricada()
         tempo_inicial = int(pygame.time.get_ticks() / 1000)
+    if mostra_pontuacao(tempo_inicial)> 20:
+        barricada_speed = 20
+    else:
+        barricada_speed = 10
 
 
     ## para aparecer elementos:
