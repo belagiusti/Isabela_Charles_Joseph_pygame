@@ -1,4 +1,4 @@
-## Colocando pontuação (Não ajustada)
+## Colocando pontuação
 import pygame 
 import random 
 
@@ -12,7 +12,7 @@ HEIGHT = 600
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 fonte = pygame.font.Font(None, 35) #variavel para definir a fonte (não coloquei nenhuma)
 pygame.display.set_caption('🏃🏽‍♂️🏃🏽‍♀️RUN GAME🏃🏽‍♀️🏃🏽‍♂️')
-tempo_inicial = 10 #zera a pontuação ao reiniciar
+tempo_inicial = 0 #zera a pontuação ao reiniciar
 
 
 imagem_fundo = pygame.image.load('assets/img/RUA.png').convert_alpha()
@@ -53,11 +53,11 @@ def reposiciona_barricada():
 reposiciona_barricada()
 
 #função que mostra a pontuação
-def mostra_pontuacao():
+def mostra_pontuacao(tempo_inicial):
     contagem_tempo = int(pygame.time.get_ticks() / 1000) - tempo_inicial #pega os milliseconds e subtrai do tempo inicial quando reiniciar o jogo (precisa dividir por mil para ficar em segundos)        
     texto_pontuacao_tela = fonte.render(f'Pontuação: {contagem_tempo}', False, (28,28,28))
 
-    texto_pontuacao_retangulo = texto_pontuacao_tela.get_rect(center = (500, 50)) #cria a pontuação
+    texto_pontuacao_retangulo = texto_pontuacao_tela.get_rect(center = (WIDTH/2, 50)) #cria a pontuação
     window.blit(texto_pontuacao_tela, texto_pontuacao_retangulo) #desenha a pontuação na janela
     return contagem_tempo #retorna a pontuação
 
@@ -143,7 +143,8 @@ def show_start_screen():
                 exit()
             if event.type == pygame.KEYUP or event.type == pygame.MOUSEBUTTONUP:
                 waiting = False
-                mostra_pontuacao()
+                tempo_inicial = int(pygame.time.get_ticks() / 1000)
+                mostra_pontuacao(tempo_inicial)
 
 # Carrega a imagem de fundo da tela de início
 imagem_inicio = pygame.image.load('assets/img/FUNDO_inicio.png').convert()
@@ -155,7 +156,7 @@ speed_fundo = 10
 
 # Chama a tela de início ao iniciar o jogo
 show_start_screen()
-
+tempo_inicial = int(pygame.time.get_ticks() / 1000)
 ############################# LOOP PRINCIPAL ###################################
 
 loop = True 
@@ -196,7 +197,7 @@ while loop:
     imagem_fundo_rect_2 = imagem_fundo_rect.copy()
     imagem_fundo_rect_2.y -= imagem_fundo_rect_2.height
     window.blit(imagem_fundo, imagem_fundo_rect_2)
-    mostra_pontuacao()
+    mostra_pontuacao(tempo_inicial)
 
     # Atualiza a posição da barricada
     imagem_barricada_rect.y += barricada_speed
@@ -208,6 +209,8 @@ while loop:
     # Verifica colisão entre o carro e a barricada
     if imagem_carro_vermelho_rect.colliderect(imagem_barricada_rect):
         show_game_over_screen()  # Chama a tela de "Game Over" se houver colisão
+        reposiciona_barricada()
+        tempo_inicial = int(pygame.time.get_ticks() / 1000)
 
 
     ## para aparecer elementos:
