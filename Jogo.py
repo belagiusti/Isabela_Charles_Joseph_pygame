@@ -166,8 +166,7 @@ tempo_inicial = int(pygame.time.get_ticks() / 1000)
 loop = True 
 
 while loop:
-    
-    if mostra_pontuacao(tempo_inicial)> 30:
+    if mostra_pontuacao(tempo_inicial)> 30 :
         imagem_fundo = pygame.image.load('assets/img/RUA3.png').convert() #carrega a imagem da fase 3.
     elif mostra_pontuacao(tempo_inicial)>15:
         imagem_fundo = pygame.image.load('assets/img/RUA2.png').convert() #carrega a imagem da fase 2.
@@ -223,8 +222,33 @@ while loop:
         show_game_over_screen()  # Chama a tela de "Game Over" se houver colisão
         reposiciona_barricada()
         tempo_inicial = int(pygame.time.get_ticks() / 1000)
+
+
+
+    # if mostra_pontuacao(tempo_inicial)==40:
+    #     tempo1 = 40 
+    #     tempo2 = 40 
+    # if mostra_pontuacao(tempo_inicial)>40:
+    #     if (tempo1 == tempo2 + 10):
+    #         tempo1 = tempo2+10
+    #         tempo2 = tempo1+10 
+    #         barricada_speed += 5 
+
+
+    # if 40>mostra_pontuacao(tempo_inicial)> 30:
+    #     barricada_speed = 20
+    # elif mostra_pontuacao(tempo_inicial)> 15:
+    #     barricada_speed = 15
+    # else:
+    #     barricada_speed = 10
+
+
+
+
+
     if mostra_pontuacao(tempo_inicial)> 30:
         barricada_speed = 20
+        cnt = 0 
     elif mostra_pontuacao(tempo_inicial)> 15:
         barricada_speed = 15
     else:
